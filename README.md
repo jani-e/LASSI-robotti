@@ -8,6 +8,6 @@ This is the simplest template to start from.
 - You can configure dependencies in `conda.yaml`.
 
 ## Learning materials
+
 - [Robocorp Developer Training Courses](https://robocorp.com/docs/courses)
-mple bots in Robocorp Portal](https://robocorp.com/portal)
-"# LASSI-robotti"
+  "# LASSI-robotti"
