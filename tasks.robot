@@ -1,16 +1,22 @@
 *** Settings ***
 Documentation       Template robot main suite.
-Library    RPA.Browser.Selenium    auto_close${FALSE}
-Library    RPA.Dialogs
+
+Library             RPA.Browser.Selenium    auto_close${FALSE}
+Library             RPA.Dialogs
+
 
 *** Variables ***
 ${CANVAS_URL}=      https://opinto.laurea.fi/canvas.html
+${CREDENTIALS}
+
 
 *** Tasks ***
 Minimal task
     Ask Student Credentials
     #Open Canvas
     #[Teardown]    Close Browser
+    Log    ${CREDENTIALS.username}
+
 
 *** Keywords ***
 Ask Student Credentials
@@ -19,7 +25,8 @@ Ask Student Credentials
     Add text input    username
     Add text    Password?
     Add password input    password
-    ${credentials}=    Run dialog
+    ${INPUTS}=    Run dialog
+    Set Global Variable    ${CREDENTIALS}    ${INPUTS}
 
 Open Canvas
     Open Available Browser    ${CANVAS_URL}
