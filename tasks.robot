@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       Template robot main suite.
 
-Library             RPA.Browser.Selenium    auto_close${FALSE}
+Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Dialogs
 
 
@@ -14,8 +14,7 @@ ${CREDENTIALS}
 Minimal task
     Ask Student Credentials
     Open Canvas
-    Log    ${CREDENTIALS.username}
-    [Teardown]    Close Browser
+ #    [Teardown]    Close Browser
 
 
 *** Keywords ***
@@ -30,3 +29,7 @@ Ask Student Credentials
 
 Open Canvas
     Open Available Browser    ${CANVAS_URL}
+    Click Element    xpath://html/body/div[1]/div[3]/a/div
+    Input Text    name:UserName    ${CREDENTIALS.username}
+    Input Password    name:Password    ${CREDENTIALS.password}
+    Click Element    id:submitButton
