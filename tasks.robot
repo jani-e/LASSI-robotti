@@ -13,9 +13,9 @@ ${CREDENTIALS}
 *** Tasks ***
 Minimal task
     Ask Student Credentials
-    #Open Canvas
-    #[Teardown]    Close Browser
+    Open Canvas
     Log    ${CREDENTIALS.username}
+    [Teardown]    Close Browser
 
 
 *** Keywords ***
