@@ -65,4 +65,11 @@ Log out from Canvas
 
 Log in to Intranet
     Open Available Browser    ${LAUREA_INTRANET_URL}
-    #Input Text    id:i0116    text
+    Wait Until Element Is Visible    name=loginfmt
+    Input Text    name=loginfmt     ${CREDENTIALS.username}
+    Click Element    id=idSIButton9
+    Wait Until Element Is Visible    name=Password
+    Input Password    name=Password    ${CREDENTIALS.password}
+    Click Element    id=submitButton
+    Wait Until Element Is Visible    id=idBtn_Back
+    Click Element    id=idBtn_Back
