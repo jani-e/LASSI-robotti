@@ -7,6 +7,7 @@ Library             RPA.Dialogs
 
 *** Variables ***
 ${CANVAS_URL}=      https://opinto.laurea.fi/canvas.html
+${LAUREA_INTRANET_URL}=    https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${CREDENTIALS}
 
 
@@ -22,6 +23,8 @@ Open Canvas and save task due dates
 
  #    [Teardown]    Close Browser
 
+Open Intranet, save News and Lunch menu
+    Log in to Intranet
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -59,3 +62,7 @@ Log out from Canvas
     #Wait Until Element Is Visible     class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
 
     Click Element    xpath=//*[contains(text(), "Log out")]
+
+Log in to Intranet
+    Open Available Browser    ${LAUREA_INTRANET_URL}
+    #Input Text    id:i0116    text
