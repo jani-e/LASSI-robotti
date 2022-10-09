@@ -15,16 +15,17 @@ ${CREDENTIALS}
 Ask Student Credentials
     Open dialog and ask credentials
 
-Open Canvas and save task due dates
-    Log in to Canvas
-    Navigate to calendar
-    Take screenshot
+# Open Canvas and save task due dates
+#     Log in to Canvas
+#     Navigate to calendar
+#     Take screenshot
     #Log out from Canvas         #  EI TOIMI
 
  #    [Teardown]    Close Browser
 
 Open Intranet, save News and Lunch menu
     Log in to Intranet
+    Save Intranet News
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -73,3 +74,11 @@ Log in to Intranet
     Click Element    id=submitButton
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
+
+Save Intranet News
+    ${TIMEOUT}=    Set Selenium Timeout    5 seconds
+    Wait Until Page Contains Element    id=ef562aa7-95f5-4e4d-813f-71867161b16a    ${TIMEOUT}
+    Wait Until Keyword Succeeds    5x    2s    
+    ...    Capture Element Screenshot
+    ...    id=ef562aa7-95f5-4e4d-813f-71867161b16a
+    ...    ${OUTPUT_DIR}${/}intranet.png
