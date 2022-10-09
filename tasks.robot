@@ -18,6 +18,8 @@ Open Canvas and save task due dates
     Log in to Canvas
     Navigate to calendar
     Take screenshot
+    Log out from Canvas
+
  #    [Teardown]    Close Browser
 
 
@@ -40,8 +42,22 @@ Log in to Canvas
 
 Navigate to calendar
     Click Element    id=global_nav_calendar_link
+    Wait Until Element Is Visible    id=agenda
     Click Button    id=agenda
 
 Take screenshot
     Wait Until Element Is Visible    id=calendar-app
-    Capture Element Screenshot    id=calendar-app    ${OUTPUT_DIR}${/}canvas.png
+    Wait Until Keyword Succeeds
+    ...    5x
+    ...    2s
+    ...    Capture Element Screenshot
+    ...    id=calendar-app
+    ...    ${OUTPUT_DIR}${/}canvas.png
+
+Log out from Canvas
+    Click Button    id=global_nav_profile_link
+    Wait Until Element Is Visible
+    ...    class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
+
+    Click Button
+    ...    class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
