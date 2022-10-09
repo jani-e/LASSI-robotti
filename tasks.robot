@@ -18,7 +18,7 @@ Open Canvas and save task due dates
     Log in to Canvas
     Navigate to calendar
     Take screenshot
-    Log out from Canvas
+    #Log out from Canvas         #  EI TOIMI
 
  #    [Teardown]    Close Browser
 
@@ -56,8 +56,6 @@ Take screenshot
 
 Log out from Canvas
     Click Button    id=global_nav_profile_link
-    Wait Until Element Is Visible
-    ...    class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
+    #Wait Until Element Is Visible     class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
 
-    Click Button
-    ...    class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
+    Click Element    xpath=//*[contains(text(), "Log out")]
