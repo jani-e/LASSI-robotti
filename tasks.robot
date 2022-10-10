@@ -35,13 +35,17 @@ Open dialog and ask credentials
     Add text    Password?
     Add password input    password
     ${INPUTS}=    Run dialog
+    Set Log Level    NONE
     Set Global Variable    ${CREDENTIALS}    ${INPUTS}
+    Set Log Level    INFO
 
 Log in to Canvas
     Open Available Browser    ${CANVAS_URL}
     Click Element    xpath://html/body/div[1]/div[3]/a/div
     Input Text    name:UserName    ${CREDENTIALS.username}
+    Set Log Level    NONE
     Input Password    name:Password    ${CREDENTIALS.password}
+    Set Log Level    INFO
     Click Element    id:submitButton
 
 Navigate to calendar
@@ -70,7 +74,9 @@ Log in to Intranet
     Input Text    name=loginfmt     ${CREDENTIALS.username}
     Click Element    id=idSIButton9
     Wait Until Element Is Visible    name=Password
+    Set Log Level    NONE
     Input Password    name=Password    ${CREDENTIALS.password}
+    Set Log Level    INFO
     Click Element    id=submitButton
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
