@@ -16,10 +16,10 @@ ${CREDENTIALS}
 Ask Student Credentials
     Open dialog and ask credentials
 
-# Open Canvas and save task due dates
-#    Log in to Canvas
-#    Navigate to calendar
-#    Take screenshot
+ Open Canvas and save task due dates
+    Log in to Canvas
+    Navigate to calendar
+    Take screenshot
     #Log out from Canvas    #    EI TOIMI
 
  #    [Teardown]    Close Browser
@@ -103,7 +103,7 @@ Log out from intranet
     Click Element    id=O365_HeaderRightRegion
     Wait Until Page Contains Element    link=Kirjaudu ulos    20 seconds
     Click Link    link=Kirjaudu ulos
-    Wait Until Page Contains Element    id=login_workload_logo_text
+    Wait Until Page Contains Element    id=login_workload_logo_text    20 seconds
 
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
