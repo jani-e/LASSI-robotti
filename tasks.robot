@@ -6,8 +6,9 @@ Library             RPA.Dialogs
 
 
 *** Variables ***
-${CANVAS_URL}=      https://opinto.laurea.fi/canvas.html
-${LAUREA_INTRANET_URL}=    https://laureauas.sharepoint.com/sites/Opiskelijaintranet
+${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
+${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
+${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
 ${CREDENTIALS}
 
 
@@ -16,16 +17,20 @@ Ask Student Credentials
     Open dialog and ask credentials
 
 # Open Canvas and save task due dates
-#     Log in to Canvas
-#     Navigate to calendar
-#     Take screenshot
-    #Log out from Canvas         #  EI TOIMI
+#    Log in to Canvas
+#    Navigate to calendar
+#    Take screenshot
+    #Log out from Canvas    #    EI TOIMI
 
  #    [Teardown]    Close Browser
 
 Open Intranet, save News and Lunch menu
     Log in to Intranet
+    Navigate to news
     Save Intranet News
+    Log out from intranet
+    Navigate to lunch menu
+
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -64,14 +69,14 @@ Take screenshot
 
 Log out from Canvas
     Click Button    id=global_nav_profile_link
-    #Wait Until Element Is Visible     class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
+    #Wait Until Element Is Visible    class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
 
     Click Element    xpath=//*[contains(text(), "Log out")]
 
 Log in to Intranet
     Open Available Browser    ${LAUREA_INTRANET_URL}
     Wait Until Element Is Visible    name=loginfmt
-    Input Text    name=loginfmt     ${CREDENTIALS.username}
+    Input Text    name=loginfmt    ${CREDENTIALS.username}
     Click Element    id=idSIButton9
     Wait Until Element Is Visible    name=Password
     Set Log Level    NONE
@@ -81,10 +86,24 @@ Log in to Intranet
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
 
+Navigate to news
+    Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
+
 Save Intranet News
-    ${TIMEOUT}=    Set Selenium Timeout    5 seconds
-    Wait Until Page Contains Element    id=ef562aa7-95f5-4e4d-813f-71867161b16a    ${TIMEOUT}
-    Wait Until Keyword Succeeds    5x    2s    
+    Wait Until Keyword Succeeds
+    ...    5x
+    ...    2s
     ...    Capture Element Screenshot
-    ...    id=ef562aa7-95f5-4e4d-813f-71867161b16a
+    ...    id=61b21872-b872-4a01-8c48-f65b61b67401
     ...    ${OUTPUT_DIR}${/}intranet.png
+
+Log out from intranet
+ #    ${TIMEOUT}=    Set Selenium Timeout    5 seconds
+    Wait Until Page Contains Element    id=O365_HeaderRightRegion
+    Click Element    id=O365_HeaderRightRegion
+    Wait Until Page Contains Element    link=Kirjaudu ulos    20 seconds
+    Click Link    link=Kirjaudu ulos
+    Wait Until Page Contains Element    id=login_workload_logo_text
+
+Navigate to lunch menu
+    Go To    ${LAUREABAR_URL}
