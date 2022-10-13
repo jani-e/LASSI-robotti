@@ -18,11 +18,11 @@ ${CREDENTIALS}
 Ask Student Credentials
 Open dialog and ask credentials
 
-Open Canvas and save task due dates
-   Log in to Canvas
-   Navigate to calendar
-   Take screenshot
-#Log out from Canvas    #    EI TOIMI
+ # Open Canvas and save task due dates
+    #    Log in to Canvas
+    #    Navigate to calendar
+    #    Take screenshot
+    #Log out from Canvas    #    EI TOIMI
 
  #    [Teardown]    Close Browser
 
