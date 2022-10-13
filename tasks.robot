@@ -4,6 +4,8 @@ Documentation       Template robot main suite.
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Dialogs
 Library             RPA.Desktop
+Library             Collections
+Library             OperatingSystem
 
 
 *** Variables ***
@@ -15,10 +17,10 @@ ${CREDENTIALS}
 
 
 *** Tasks ***
-#Ask Student Credentials
+Ask Student Credentials
     Open dialog and ask credentials
 
-# Open Canvas and save task due dates
+Open Canvas and save task due dates
     Log in to Canvas
     Navigate to calendar
     Take screenshot
@@ -26,7 +28,7 @@ ${CREDENTIALS}
 
  #    [Teardown]    Close Browser
 
-#Open Intranet, save News and Lunch menu
+Open Intranet, save News and Lunch menu
     Log in to Intranet
     Navigate to news
     Save Intranet News
@@ -37,6 +39,8 @@ Navigate to Itewiki and Find a Job
     Navigate to Itewiki
     Choose RPA Jobs
     Take a Screenshot of the Results
+
+    Save lunch menu
 
 
 *** Keywords ***
