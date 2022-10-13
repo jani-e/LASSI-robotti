@@ -16,10 +16,10 @@ ${CREDENTIALS}
 Ask Student Credentials
     Open dialog and ask credentials
 
- Open Canvas and save task due dates
-    Log in to Canvas
-    Navigate to calendar
-    Take screenshot
+ # Open Canvas and save task due dates
+    #    Log in to Canvas
+    #    Navigate to calendar
+    #    Take screenshot
     #Log out from Canvas    #    EI TOIMI
 
  #    [Teardown]    Close Browser
@@ -107,3 +107,10 @@ Log out from intranet
 
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
+    Wait Until Page Contains Element    xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
+    Capture Element Screenshot
+    ...    xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
+    ...    ${OUTPUT_DIR}${/}FirstDate.png
+    Capture Element Screenshot
+    ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div
+    ...    ${OUTPUT_DIR}${/}FirstMenu.png
