@@ -3,6 +3,8 @@ Documentation       Template robot main suite.
 
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Dialogs
+Library             Collections
+Library             OperatingSystem
 
 
 *** Variables ***
@@ -14,13 +16,13 @@ ${CREDENTIALS}
 
 *** Tasks ***
 Ask Student Credentials
-    Open dialog and ask credentials
+Open dialog and ask credentials
 
- Open Canvas and save task due dates
-    Log in to Canvas
-    Navigate to calendar
-    Take screenshot
-    #Log out from Canvas    #    EI TOIMI
+Open Canvas and save task due dates
+   Log in to Canvas
+   Navigate to calendar
+   Take screenshot
+#Log out from Canvas    #    EI TOIMI
 
  #    [Teardown]    Close Browser
 
@@ -30,7 +32,7 @@ Open Intranet, save News and Lunch menu
     Save Intranet News
     Log out from intranet
     Navigate to lunch menu
-
+    Save lunch menu
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -107,3 +109,15 @@ Log out from intranet
 
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
+
+Save lunch menu
+    ${elements}=    Get WebElements    class=v-button-caption
+    ${list}=    Create List
+
+    Create File    ${OUTPUT_DIR}${/}menu.txt
+
+    FOR    ${element}    IN    @{elements}[4:9]
+        ${text}=    Get Text    ${element}
+        Append To List    ${list}    ${text}
+        Append To File    ${OUTPUT_DIR}${/}menu.text    ${text}
+    END
