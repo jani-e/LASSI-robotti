@@ -107,7 +107,7 @@ Log out from intranet
 
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
-    Wait Until Page Contains Element    xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
+    Wait Until Page Contains Element     xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
     Capture Element Screenshot
     ...    xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
     ...    ${OUTPUT_DIR}${/}FirstDate.png
