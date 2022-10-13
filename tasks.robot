@@ -43,8 +43,8 @@ Navigate to BarLaurea and save lunch menu
 Navigate to Itewiki and Find a Job
     Navigate to Itewiki
     Choose RPA Jobs
-    Take a Screenshot of the Results
-
+    Take Screenshots of the Results
+    [Teardown]    Close Browser
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -143,7 +143,15 @@ Choose RPA Jobs
     Click Element    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/ul/li[23]/a/label
     Click Element    xpath=//*[@id="job-date-switch-holder"]/div/label[1]
 
-Take a Screenshot of the Results
+Take Screenshots of the Results
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
-    Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
-    ...    ${OUTPUT_DIR}${/}itewiki.png
+    # Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+    # ...    ${OUTPUT_DIR}${/}itewiki.png
+    ${LIST}=    Get WebElements    class=wp_details
+    ${index}=    Set Variable    1
+    FOR    ${element}    IN    @{LIST}
+        Capture Element Screenshot    ${element}
+        ...    ${OUTPUT_DIR}${/}ilmoitukset${/}ilmoitus${index}.png
+        ${index}=    Evaluate    ${index} + 1
+    END
+    #TODO: kuvien sijasta tallentaisi titlen, kuvauksen sekä linkin
