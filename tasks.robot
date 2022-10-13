@@ -9,11 +9,12 @@ Library             OperatingSystem
 
 
 *** Variables ***
+${CREDENTIALS}
 ${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
 ${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
-${CREDENTIALS}
+${TIMEOUT}=                 Set Selenium Timeout    20 seconds
 
 
 *** Tasks ***
@@ -28,19 +29,21 @@ Open Canvas and save task due dates
 
  #    [Teardown]    Close Browser
 
-Open Intranet, save News and Lunch menu
+Open Intranet and save News
     Log in to Intranet
     Navigate to news
     Save Intranet News
     Log out from intranet
+
+Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
+    Save lunch menu
+    [Teardown]    Close Browser
 
 Navigate to Itewiki and Find a Job
     Navigate to Itewiki
     Choose RPA Jobs
     Take a Screenshot of the Results
-
-    Save lunch menu
 
 
 *** Keywords ***
@@ -109,15 +112,15 @@ Save Intranet News
     ...    ${OUTPUT_DIR}${/}intranet.png
 
 Log out from intranet
- #    ${TIMEOUT}=    Set Selenium Timeout    5 seconds
     Wait Until Page Contains Element    id=O365_HeaderRightRegion
     Click Element    id=O365_HeaderRightRegion
-    Wait Until Page Contains Element    link=Kirjaudu ulos    20 seconds
+    Wait Until Page Contains Element    link=Kirjaudu ulos    ${TIMEOUT}
     Click Link    link=Kirjaudu ulos
-    Wait Until Page Contains Element    id=login_workload_logo_text    20 seconds
+    Wait Until Page Contains Element    id=login_workload_logo_text    ${TIMEOUT}
 
 Navigate to lunch menu
-    Go To    ${LAUREABAR_URL}
+    Open Available Browser    ${LAUREABAR_URL}
+    Wait Until Page Contains Element    class=v-button-caption
 
 Save lunch menu
     ${elements}=    Get WebElements    class=v-button-caption
@@ -128,7 +131,7 @@ Save lunch menu
     FOR    ${element}    IN    @{elements}[4:9]
         ${text}=    Get Text    ${element}
         Append To List    ${list}    ${text}
-        Append To File    ${OUTPUT_DIR}${/}menu.text    ${text}
+        Append To File    ${OUTPUT_DIR}${/}menu.txt    ${text}
     END
 
 Navigate to Itewiki
