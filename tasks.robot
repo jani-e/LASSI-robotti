@@ -3,20 +3,22 @@ Documentation       Template robot main suite.
 
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Dialogs
+Library             RPA.Desktop
 
 
 *** Variables ***
 ${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
+${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
 ${CREDENTIALS}
 
 
 *** Tasks ***
-Ask Student Credentials
+#Ask Student Credentials
     Open dialog and ask credentials
 
- Open Canvas and save task due dates
+# Open Canvas and save task due dates
     Log in to Canvas
     Navigate to calendar
     Take screenshot
@@ -24,12 +26,17 @@ Ask Student Credentials
 
  #    [Teardown]    Close Browser
 
-Open Intranet, save News and Lunch menu
+#Open Intranet, save News and Lunch menu
     Log in to Intranet
     Navigate to news
     Save Intranet News
     Log out from intranet
     Navigate to lunch menu
+
+Navigate to Itewiki and Find a Job
+    Navigate to Itewiki
+    Choose RPA Jobs
+    Take a Screenshot of the Results
 
 
 *** Keywords ***
@@ -107,3 +114,17 @@ Log out from intranet
 
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
+
+Navigate to Itewiki
+    Open Available Browser
+    Go to    ${ITEWIKI_URL}
+
+Choose RPA Jobs
+    Click Button    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/button
+    Click Element    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/ul/li[23]/a/label
+    Click Element    xpath=//*[@id="job-date-switch-holder"]/div/label[1]
+
+Take a Screenshot of the Results
+    Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+    Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+    ...    ${OUTPUT_DIR}${/}itewiki.png
