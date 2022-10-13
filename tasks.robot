@@ -3,12 +3,16 @@ Documentation       Template robot main suite.
 
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Dialogs
+Library             RPA.Desktop
+Library             Collections
+Library             OperatingSystem
 
 
 *** Variables ***
 ${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
+${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
 ${CREDENTIALS}
 
 
@@ -16,10 +20,10 @@ ${CREDENTIALS}
 Ask Student Credentials
     Open dialog and ask credentials
 
- # Open Canvas and save task due dates
-    #    Log in to Canvas
-    #    Navigate to calendar
-    #    Take screenshot
+Open Canvas and save task due dates
+    Log in to Canvas
+    Navigate to calendar
+    Take screenshot
     #Log out from Canvas    #    EI TOIMI
 
  #    [Teardown]    Close Browser
@@ -30,6 +34,13 @@ Open Intranet, save News and Lunch menu
     Save Intranet News
     Log out from intranet
     Navigate to lunch menu
+
+Navigate to Itewiki and Find a Job
+    Navigate to Itewiki
+    Choose RPA Jobs
+    Take a Screenshot of the Results
+
+    Save lunch menu
 
 
 *** Keywords ***
@@ -107,10 +118,29 @@ Log out from intranet
 
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
-    Wait Until Page Contains Element     xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
-    Capture Element Screenshot
-    ...    xpath=//*[@id="main-view"]/div/div/div[2]/div/div/div/div[2]/div[2]/div[2]/div
-    ...    ${OUTPUT_DIR}${/}FirstDate.png
-    Capture Element Screenshot
-    ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div
-    ...    ${OUTPUT_DIR}${/}FirstMenu.png
+
+Save lunch menu
+    ${elements}=    Get WebElements    class=v-button-caption
+    ${list}=    Create List
+
+    Create File    ${OUTPUT_DIR}${/}menu.txt
+
+    FOR    ${element}    IN    @{elements}[4:9]
+        ${text}=    Get Text    ${element}
+        Append To List    ${list}    ${text}
+        Append To File    ${OUTPUT_DIR}${/}menu.text    ${text}
+    END
+
+Navigate to Itewiki
+    Open Available Browser
+    Go to    ${ITEWIKI_URL}
+
+Choose RPA Jobs
+    Click Button    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/button
+    Click Element    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/ul/li[23]/a/label
+    Click Element    xpath=//*[@id="job-date-switch-holder"]/div/label[1]
+
+Take a Screenshot of the Results
+    Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+    Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+    ...    ${OUTPUT_DIR}${/}itewiki.png
