@@ -119,6 +119,18 @@ Log out from intranet
 Navigate to lunch menu
     Go To    ${LAUREABAR_URL}
 
+Save lunch menu
+    ${elements}=    Get WebElements    class=v-button-caption
+    ${list}=    Create List
+
+    Create File    ${OUTPUT_DIR}${/}menu.txt
+
+    FOR    ${element}    IN    @{elements}[4:9]
+        ${text}=    Get Text    ${element}
+        Append To List    ${list}    ${text}
+        Append To File    ${OUTPUT_DIR}${/}menu.text    ${text}
+    END
+
 Navigate to Itewiki
     Open Available Browser
     Go to    ${ITEWIKI_URL}
@@ -132,3 +144,4 @@ Take a Screenshot of the Results
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
     Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
     ...    ${OUTPUT_DIR}${/}itewiki.png
+
