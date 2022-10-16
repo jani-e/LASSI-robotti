@@ -42,8 +42,9 @@ Navigate to BarLaurea and save lunch menu
 Navigate to Itewiki and Find a Job
     Navigate to Itewiki
     Choose RPA Jobs
-    Take Screenshots of the Results
-    #[Teardown]    Close Browser
+    #Take Screenshots of the Results
+    Save Job Results to a File
+    [Teardown]    Close Browser
 
 
 *** Keywords ***
@@ -143,16 +144,24 @@ Choose RPA Jobs
     Click Element    xpath=//*[@id="job-date-switch-holder"]/div/label[1]
     Click Element    xpath=//*[@id="search1"]/div[2]/div/a[2]
 
-Take Screenshots of the Results
+# Take Screenshots of the Results
+#     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+#     # Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
+#     # ...    ${OUTPUT_DIR}${/}itewiki.png
+#     ${LIST}=    Get WebElements    class=wp_details
+#     ${index}=    Set Variable    1
+#     FOR    ${element}    IN    @{LIST}
+#         Scroll Element Into View    ${element}
+#         Capture Element Screenshot    ${element}
+#         ...    ${OUTPUT_DIR}${/}ilmoitukset${/}ilmoitus${index}.png
+#         ${index}=    Evaluate    ${index} + 1
+#     END
+
+Save Job Results to a File
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
-    # Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
-    # ...    ${OUTPUT_DIR}${/}itewiki.png
-    ${LIST}=    Get WebElements    class=wp_details
-    ${index}=    Set Variable    1
-    FOR    ${element}    IN    @{LIST}
-        Scroll Element Into View    ${element}
-        Capture Element Screenshot    ${element}
-        ...    ${OUTPUT_DIR}${/}ilmoitukset${/}ilmoitus${index}.png
-        ${index}=    Evaluate    ${index} + 1
+    ${elements}=    Get WebElements    class=wp_details
+    Create File    ${OUTPUT_DIR}${/}jobs.txt
+    FOR   ${element}   IN   @{elements}
+        ${text}=    Get Text    ${element}
+        Append To File    ${OUTPUT_DIR}${/}jobs.txt    ${text}
     END
-    #TODO: kuvien sijasta tallentaisi titlen, kuvauksen sekä linkin
