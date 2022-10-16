@@ -38,7 +38,9 @@ Open Intranet and save News
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
     Save lunch menu
-    [Teardown]    Close Browser
+    Navigate to next lunch menu
+    Save next lunch menu
+#    [Teardown]    Close Browser
 
 Navigate to Itewiki and Find a Job
     Navigate to Itewiki
@@ -127,12 +129,32 @@ Save lunch menu
     ${elements}=    Get WebElements    class=v-button-caption
     ${list}=    Create List
 
-    Create File    ${OUTPUT_DIR}${/}menu.txt
+    Create File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt
 
-    FOR    ${element}    IN    @{elements}[4:9]
+    FOR    ${element}    IN    @{elements}[5:9]
         ${text}=    Get Text    ${element}
         Append To List    ${list}    ${text}
-        Append To File    ${OUTPUT_DIR}${/}menu.txt    ${text}
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${text}
+    END
+
+Navigate to next lunch menu
+    Wait Until Element Is Visible    class=date--next
+    Click Element    class=date--next
+    Wait Until Page Contains Element    id=appsmenu-1186092753-overlays
+
+Save next lunch menu
+    Wait Until Page Contains Element
+    ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
+    ${titles}=    Get WebElements    class=multiline-button-caption-text
+    ${content}=    Get WebElements    class=item-name
+    ${list}=    Create List
+
+    Create File    ${OUTPUT_DIR}${/}ruokalistat${/}next_menu.txt
+
+    FOR    ${element}    IN    @{titles}
+        ${text}=    Get Text    ${element}
+        Append To List    ${list}    ${text}
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}next_menu.txt    ${text}
     END
 
 Navigate to Itewiki
