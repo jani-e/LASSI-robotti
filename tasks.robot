@@ -44,7 +44,8 @@ Navigate to Itewiki and Find a Job
     Navigate to Itewiki
     Choose RPA Jobs
     Take Screenshots of the Results
-    [Teardown]    Close Browser
+    #[Teardown]    Close Browser
+
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -136,12 +137,14 @@ Save lunch menu
 
 Navigate to Itewiki
     Open Available Browser
+    Maximize Browser Window
     Go to    ${ITEWIKI_URL}
 
 Choose RPA Jobs
     Click Button    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/button
     Click Element    xpath=//*[@id="search1_form"]/div[2]/div[2]/div/span/div/ul/li[23]/a/label
     Click Element    xpath=//*[@id="job-date-switch-holder"]/div/label[1]
+    Click Element    xpath=//*[@id="search1"]/div[2]/div/a[2]
 
 Take Screenshots of the Results
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
@@ -150,6 +153,7 @@ Take Screenshots of the Results
     ${LIST}=    Get WebElements    class=wp_details
     ${index}=    Set Variable    1
     FOR    ${element}    IN    @{LIST}
+        Scroll Element Into View    ${element}
         Capture Element Screenshot    ${element}
         ...    ${OUTPUT_DIR}${/}ilmoitukset${/}ilmoitus${index}.png
         ${index}=    Evaluate    ${index} + 1
