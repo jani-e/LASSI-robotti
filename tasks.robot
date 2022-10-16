@@ -25,9 +25,8 @@ Open Canvas and save task due dates
     Log in to Canvas
     Navigate to calendar
     Take screenshot
-    #Log out from Canvas    #    EI TOIMI
-
- #    [Teardown]    Close Browser
+    Log out from Canvas
+    [Teardown]    Close Browser
 
 Open Intranet and save News
     Log in to Intranet
@@ -84,9 +83,7 @@ Take screenshot
 
 Log out from Canvas
     Click Button    id=global_nav_profile_link
-    #Wait Until Element Is Visible    class=fOyUs_bGBk fOyUs_fKyb fOyUs_cuDs fOyUs_cBHs fOyUs_eWbJ fOyUs_fmDy fOyUs_eeJl fOyUs_cBtr fOyUs_fuTR fOyUs_cnfU fQfxa_bGBk
-
-    Click Element    xpath=//*[contains(text(), "Log out")]
+    Submit Form    dom=document.forms[0]
 
 Log in to Intranet
     Open Available Browser    ${LAUREA_INTRANET_URL}
