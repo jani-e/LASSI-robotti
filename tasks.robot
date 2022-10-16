@@ -36,10 +36,10 @@ Open Intranet and save News
 
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
-    Save lunch menu
+    Save lunch menu                # muutettava samanlaiseksi kuin seuraavan päivän lounasmenu koodi
     Navigate to next lunch menu
     Save next lunch menu
-#    [Teardown]    Close Browser
+    [Teardown]    Close Browser
 
 Navigate to Itewiki and Find a Job
     Navigate to Itewiki
@@ -143,16 +143,20 @@ Navigate to next lunch menu
 Save next lunch menu
     Wait Until Page Contains Element
     ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
-    ${titles}=    Get WebElements    class=multiline-button-caption-text
-    ${content}=    Get WebElements    class=item-name
-    ${list}=    Create List
+    ${TITLES}=    Get WebElements    class=multiline-button-caption-text
+    ${FOODS}=    Get WebElements    class=item-name
 
     Create File    ${OUTPUT_DIR}${/}ruokalistat${/}next_menu.txt
 
-    FOR    ${element}    IN    @{titles}
-        ${text}=    Get Text    ${element}
-        Append To List    ${list}    ${text}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}next_menu.txt    ${text}
+    FOR    ${INDEX}    IN RANGE    0    4
+        ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
+        ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
+        ${TITLE_TEXT}=    Get Text    ${TITLE}
+        ${FOOD_TEXT}=    Get Text    ${FOOD}
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${TITLE_TEXT}
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${FOOD_TEXT}
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n     
     END
 
 Navigate to Itewiki
