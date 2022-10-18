@@ -194,19 +194,6 @@ Choose RPA Jobs
     Click Element    xpath=//*[@id="job-date-switch-holder"]/div/label[1]
     Click Element    xpath=//*[@id="search1"]/div[2]/div/a[2]
 
-# Take Screenshots of the Results
-#    Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
-#    # Capture Element Screenshot    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
-#    # ...    ${OUTPUT_DIR}${/}itewiki.png
-#    ${LIST}=    Get WebElements    class=wp_details
-#    ${index}=    Set Variable    1
-#    FOR    ${element}    IN    @{LIST}
-#    Scroll Element Into View    ${element}
-#    Capture Element Screenshot    ${element}
-#    ...    ${OUTPUT_DIR}${/}ilmoitukset${/}ilmoitus${index}.png
-#    ${index}=    Evaluate    ${index} + 1
-#    END
-
 Save Job Results to a File
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
     ${elements}=    Get WebElements    class=wp_details
@@ -221,6 +208,6 @@ Create PDF
     ...    ${OUTPUT_DIR}${/}canvas.png
     ...    ${OUTPUT_DIR}${/}intranet.png
     ...    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt
-    ...    ${OUTPUT_DIR}${/}ruokalistat${/}next_menu.txt
+    ...    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
     ...    ${OUTPUT_DIR}${/}jobs.txt
     Add Files To Pdf    ${files}    infodump.PDF
