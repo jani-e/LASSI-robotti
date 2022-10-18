@@ -15,7 +15,7 @@ ${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
 ${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
-${TIMEOUT}=                 Set Selenium Timeout    20 seconds
+${TIMEOUT}=                 Set Selenium Timeout    20 seconds      #tarvitaanko enää?
 
 
 *** Tasks ***
@@ -30,11 +30,13 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
+    Open dialog and ask credentials
     Log in to Intranet
     Navigate to news
     Save Intranet News
     Log out from intranet
-
+    [Teardown]    Close Browser
+    
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
     Save lunch menu                # muutettava samanlaiseksi kuin seuraavan päivän lounasmenu koodi
@@ -119,9 +121,9 @@ Save Intranet News
 Log out from intranet
     Wait Until Page Contains Element    id=O365_HeaderRightRegion
     Click Element    id=O365_HeaderRightRegion
-    Wait Until Page Contains Element    link=Kirjaudu ulos    ${TIMEOUT}
-    Click Link    link=Kirjaudu ulos
-    Wait Until Page Contains Element    id=login_workload_logo_text    ${TIMEOUT}
+    Wait Until Page Contains Element    id=mectrl_body_signOut
+    Click Link    id=mectrl_body_signOut
+    Wait Until Page Contains Element    id=login_workload_logo_text
 
 Navigate to lunch menu
     Open Available Browser    ${LAUREABAR_URL}
