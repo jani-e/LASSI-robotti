@@ -7,6 +7,7 @@ Library             RPA.Desktop
 Library             Collections
 Library             OperatingSystem
 Library             RPA.PDF
+Library             TxtToPDFConverter
 
 
 *** Variables ***
@@ -53,8 +54,8 @@ Navigate to Itewiki and Find a Job
     [Teardown]    Close Browser
 
 Convert collected data to PDF
-    Create PDF
-
+    #Create PDF
+    Convert Txt To Pdf    jobs.txt    jobs.pdf
 
 *** Keywords ***
 Open dialog and ask credentials
