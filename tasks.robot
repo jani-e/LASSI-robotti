@@ -16,7 +16,7 @@ ${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
 ${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
-${TIMEOUT}=                 Set Selenium Timeout    20 seconds      #tarvitaanko enää?
+${TIMEOUT}=                 Set Selenium Timeout    20 seconds    #tarvitaanko enää?
 
 
 *** Tasks ***
@@ -24,7 +24,7 @@ Ask Student Credentials
     Open dialog and ask credentials
 
 Open Canvas and save task due dates
-    #Open dialog and ask credentials  #testausta varten: ota kommentti pois ja run
+    #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Canvas
     Navigate to calendar
     Take screenshot
@@ -32,19 +32,19 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
-    #Open dialog and ask credentials  #testausta varten: ota kommentti pois ja run
+    #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Intranet
     Navigate to news
     Save Intranet News
     Log out from intranet
     [Teardown]    Close Browser
-    
+
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
-    Save lunch menu                # muutettava samanlaiseksi kuin seuraavan päivän lounasmenu koodi
-    Navigate to next lunch menu
-    Save next lunch menu
-    #[Teardown]    Close Browser
+    Save lunch menu    # muutettava samanlaiseksi kuin seuraavan päivän lounasmenu koodi
+#    Navigate to next lunch menu
+#    Save next lunch menu
+    [Teardown]    Close Browser
 
 Navigate to Itewiki and Find a Job
     Navigate to Itewiki
@@ -56,6 +56,9 @@ Navigate to Itewiki and Find a Job
 Convert collected data to PDF
     #Create PDF
     Convert Txt To Pdf    jobs.txt    jobs.pdf
+    Convert Txt To Pdf    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    menu.pdf
+    Compile final PDF
+
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -138,9 +141,9 @@ Save lunch menu
     # Create File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt
 
     # FOR    ${element}    IN    @{elements}[5:9]
-    #     ${text}=    Get Text    ${element}
-    #     Append To List    ${list}    ${text}
-    #     Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${text}
+    #    ${text}=    Get Text    ${element}
+    #    Append To List    ${list}    ${text}
+    #    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${text}
     # END
     Wait Until Page Contains Element
     ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
@@ -157,32 +160,32 @@ Save lunch menu
         Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${TITLE_TEXT}
         Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    \n
         Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${FOOD_TEXT}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    \n     
+        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    \n
     END
 
-Navigate to next lunch menu
-    Wait Until Element Is Visible    class=date--next
-    Click Element    class=date--next
-    Wait Until Page Contains Element    id=appsmenu-1186092753-overlays
+#Navigate to next lunch menu
+#    Wait Until Element Is Visible    class=date--next
+#    Click Element    class=date--next
+#    Wait Until Page Contains Element    id=appsmenu-1186092753-overlays
 
-Save next lunch menu
-    Wait Until Page Contains Element
-    ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
-    ${TITLES}=    Get WebElements    class=multiline-button-caption-text
-    ${FOODS}=    Get WebElements    class=item-name
+#Save next lunch menu
+#    Wait Until Page Contains Element
+#    ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
+#    ${TITLES}=    Get WebElements    class=multiline-button-caption-text
+#    ${FOODS}=    Get WebElements    class=item-name
 
-    Create File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
+#    Create File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
 
-    FOR    ${INDEX}    IN RANGE    0    4
-        ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
-        ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
-        ${TITLE_TEXT}=    Get Text    ${TITLE}
-        ${FOOD_TEXT}=    Get Text    ${FOOD}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${TITLE_TEXT}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${FOOD_TEXT}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n     
-    END
+#    FOR    ${INDEX}    IN RANGE    0    4
+#    ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
+#    ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
+#    ${TITLE_TEXT}=    Get Text    ${TITLE}
+#    ${FOOD_TEXT}=    Get Text    ${FOOD}
+#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${TITLE_TEXT}
+#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n
+#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${FOOD_TEXT}
+#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n
+#    END
 
 Navigate to Itewiki
     Open Available Browser
@@ -204,11 +207,11 @@ Save Job Results to a File
         Append To File    ${OUTPUT_DIR}${/}jobs.txt    ${text}
     END
 
-Create PDF
+Compile final PDF
     ${files}=    Create List
     ...    ${OUTPUT_DIR}${/}canvas.png
     ...    ${OUTPUT_DIR}${/}intranet.png
-    ...    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt
-    ...    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
-    ...    ${OUTPUT_DIR}${/}jobs.txt
+    ...    ${OUTPUT_DIR}${/}menu.pdf
+#    ...    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
+    ...    ${OUTPUT_DIR}${/}jobs.pdf
     Add Files To Pdf    ${files}    infodump.PDF
