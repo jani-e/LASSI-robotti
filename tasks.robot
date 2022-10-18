@@ -23,6 +23,7 @@ Ask Student Credentials
     Open dialog and ask credentials
 
 Open Canvas and save task due dates
+    #Open dialog and ask credentials  #testausta varten: ota kommentti pois ja run
     Log in to Canvas
     Navigate to calendar
     Take screenshot
@@ -30,7 +31,7 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
-    Open dialog and ask credentials
+    #Open dialog and ask credentials  #testausta varten: ota kommentti pois ja run
     Log in to Intranet
     Navigate to news
     Save Intranet News
