@@ -32,10 +32,11 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
-    #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
+ #   Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Intranet
-    Navigate to news
+ #   Navigate to news
     Save Intranet News
+ #   Compile news to a single file
     Log out from intranet
     [Teardown]    Close Browser
 
@@ -112,16 +113,28 @@ Log in to Intranet
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
 
-Navigate to news
-    Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
+#Navigate to news
+  #  Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
 
 Save Intranet News
-    Wait Until Keyword Succeeds
-    ...    5x
-    ...    2s
-    ...    Capture Element Screenshot
-    ...    id=61b21872-b872-4a01-8c48-f65b61b67401
-    ...    ${OUTPUT_DIR}${/}intranet.png
+#    Wait Until Keyword Succeeds
+#    ...    5x
+#    ...    2s
+#    ...    Capture Element Screenshot
+#    ...    id=61b21872-b872-4a01-8c48-f65b61b67401
+#    ...    ${OUTPUT_DIR}${/}intranet.png
+
+    Wait Until Element Is Visible    class=ms-NewsItem
+    ${LIST}=    Get WebElements    class=ms-NewsItem
+    ${index}=    Set Variable    1
+    FOR    ${element}    IN    @{LIST}
+        Scroll Element Into View    ${element}
+        Capture Element Screenshot    ${element}
+        ...    ${OUTPUT_DIR}${/}uutiset${/}uutinen${index}.png
+        ${index}=    Evaluate    ${index} + 1
+    END
+#Compile news to a single file
+#    Add Watermark Image To Pdf    ${OUTPUT_DIR}${/}uutiset${/}uutinen1.png    testi.pdf    uutiset.pdf
 
 Log out from intranet
     Wait Until Page Contains Element    id=O365_HeaderRightRegion
@@ -210,7 +223,11 @@ Save Job Results to a File
 Compile final PDF
     ${files}=    Create List
     ...    ${OUTPUT_DIR}${/}canvas.png
-    ...    ${OUTPUT_DIR}${/}intranet.png
+#    ...    ${OUTPUT_DIR}${/}intranet.png
+    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen1.png
+    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen2.png
+    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen3.png
+    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen4.png
     ...    ${OUTPUT_DIR}${/}menu.pdf
 #    ...    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
     ...    ${OUTPUT_DIR}${/}jobs.pdf
