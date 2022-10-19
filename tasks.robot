@@ -32,11 +32,11 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
-    Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
+    #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Intranet
     Save Intranet News
     Log out from intranet
-    #[Teardown]    Close Browser
+    [Teardown]    Close Browser
 
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
