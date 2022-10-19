@@ -32,11 +32,11 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
-    #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
+    Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Intranet
     Save Intranet News
     Log out from intranet
-    [Teardown]    Close Browser
+    #[Teardown]    Close Browser
 
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
@@ -110,6 +110,10 @@ Log in to Intranet
     Input Password    name=Password    ${CREDENTIALS.password}
     Set Log Level    INFO
     Click Element    id=submitButton
+    Wait Until Element Is Visible    id=idDiv_SAOTCAS_Title
+    Add heading    Laurea Authenticator Required
+    Add text    Press close once authenticator is successful.
+    Run dialog
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
 
