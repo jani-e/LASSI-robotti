@@ -13,7 +13,7 @@ Library             TxtToPDFConverter
 *** Variables ***
 ${CREDENTIALS}
 ${ROBOT_FILES}=             ${OUTPUT_DIR}${/}robot_files
-${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
+${CANVAS_URL}=              https://canvas.laurea.fi/login/35
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
 ${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
@@ -75,7 +75,6 @@ Open dialog and ask credentials
 
 Log in to Canvas
     Open Available Browser    ${CANVAS_URL}
-    Click Element    xpath://html/body/div[1]/div[3]/a/div
     Input Text    name:UserName    ${CREDENTIALS.username}
     Set Log Level    NONE
     Input Password    name:Password    ${CREDENTIALS.password}
