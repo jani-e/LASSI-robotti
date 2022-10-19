@@ -34,7 +34,6 @@ Open Canvas and save task due dates
 Open Intranet and save News
     #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Intranet
-    Navigate to news
     Save Intranet News
     Log out from intranet
     [Teardown]    Close Browser
@@ -114,16 +113,19 @@ Log in to Intranet
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
 
-Navigate to news
-    Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
+#Navigate to news
+    #    Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
 
 Save Intranet News
-    Wait Until Keyword Succeeds
-    ...    5x
-    ...    2s
-    ...    Capture Element Screenshot
-    ...    id=61b21872-b872-4a01-8c48-f65b61b67401
-    ...    ${ROBOT_FILES}${/}intranet.png
+    Wait Until Element Is Visible    class=ms-NewsItem
+    ${LIST}=    Get WebElements    class=ms-NewsItem
+    ${index}=    Set Variable    1
+    FOR    ${element}    IN    @{LIST}
+        Scroll Element Into View    ${element}
+        Capture Element Screenshot    ${element}
+        ...    ${ROBOT_FILES}${/}uutiset${/}uutinen${index}.png
+        ${index}=    Evaluate    ${index} + 1
+    END
 
 Log out from intranet
     Wait Until Page Contains Element    id=O365_HeaderRightRegion
@@ -201,7 +203,10 @@ Save Job Results to a File
 Compile Final PDF
     ${files}=    Create List
     ...    ${ROBOT_FILES}${/}canvas.png
-    ...    ${ROBOT_FILES}${/}intranet.png
+    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen1.png
+    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen2.png
+    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen3.png
+    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen4.png
     ...    ${ROBOT_FILES}${/}menu.pdf
     ...    ${ROBOT_FILES}${/}jobs.pdf
     Add Files To Pdf    ${files}    ${ROBOT_FILES}${/}infodump.pdf
