@@ -12,6 +12,7 @@ Library             TxtToPDFConverter
 
 *** Variables ***
 ${CREDENTIALS}
+@{STATUS}
 ${ROBOT_FILES}=             ${OUTPUT_DIR}${/}robot_files
 ${CANVAS_URL}=              https://canvas.laurea.fi/login/35
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
@@ -21,34 +22,69 @@ ${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
 
 *** Tasks ***
 Ask Student Credentials
-    Open dialog and ask credentials
+    ${process_status}=    Set Variable    Ask Student Credentials: Success
+    TRY
+        Open dialog and ask credentials
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Ask Student Credentials: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END
 
 Open Canvas and save task due dates
     #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
-    Log in to Canvas
-    Navigate to calendar
-    Take screenshot
-    Log out from Canvas
+    ${process_status}=    Set Variable    Save Canvas task due dates: Success
+    TRY
+        Log in to Canvas
+        Navigate to calendar
+        Take screenshot
+        Log out from Canvas
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Save Canvas task due dates: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END    
     [Teardown]    Close Browser
 
 Open Intranet and save News
     #Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
-    Log in to Intranet
-    Save Intranet News
-    Log out from intranet
+    ${process_status}=    Set Variable    Save Intranet News: Success
+    TRY
+        Log in to Intranet
+        Save Intranet News
+        Log out from intranet
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Save Intranet News: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END
     [Teardown]    Close Browser
 
 Navigate to BarLaurea and save lunch menu
-    Navigate to lunch menu
-    Save lunch menu
-#    Navigate to next lunch menu
-#    Save next lunch menu
+    ${process_status}=    Set Variable    Save Lunch menu: Success
+    TRY
+        Navigate to lunch menu
+        Save lunch menu
+    #    Navigate to next lunch menu
+    #    Save next lunch menu
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Save Lunch menu: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END
     [Teardown]    Close Browser
 
 Navigate to Itewiki and Find Jobs
-    Navigate to Itewiki
-    Choose RPA Jobs
-    Save Job Results to a File
+    ${process_status}=    Set Variable    Save Itewiki Jobs: Success
+    TRY
+        Navigate to Itewiki
+        Choose RPA Jobs
+        Save Job Results to a File
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Save Itewiki Jobs: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END
     [Teardown]    Close Browser
 
 Convert collected data to PDF
@@ -204,19 +240,37 @@ Save Job Results to a File
     END
 
 Compile Final PDF
-    ${files}=    Create List
-    ...    ${ROBOT_FILES}${/}canvas.png
-    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen1.png
-    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen2.png
-    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen3.png
-    ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen4.png
-    ...    ${ROBOT_FILES}${/}menu.pdf
-    ...    ${ROBOT_FILES}${/}jobs.pdf
-    Add Files To Pdf    ${files}    ${ROBOT_FILES}${/}infodump.pdf
+    ${process_status}=    Set Variable    Combile Final PDF: Success
+    TRY
+        ${files}=    Create List
+        ...    ${ROBOT_FILES}${/}canvas.png
+        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen1.pn
+        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen2.png
+        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen3.png
+        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen4.png
+        ...    ${ROBOT_FILES}${/}menu.pdf
+        ...    ${ROBOT_FILES}${/}jobs.pdf
+        Add Files To Pdf    ${files}    ${ROBOT_FILES}${/}infodump.pdf
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Combile Final PDF: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END
+    
 
 Open PDF to User
-    Open File    ${ROBOT_FILES}${/}infodump.pdf
+    ${process_status}=    Set Variable    Open PDF to User: Success
+    TRY
+        Open File    ${ROBOT_FILES}${/}infodump.pdf
+    EXCEPT    AS    ${error_message}
+        ${process_status}=    Set Variable    Open PDF to User: Failed
+    FINALLY
+        Append To List    ${STATUS}    ${process_status}
+    END
 
 Show Robot Success Dialog
     Add heading    Robot tasks finished!
+    FOR    ${text}    IN    @{STATUS}
+        Add text    ${text}
+    END
     Run dialog
