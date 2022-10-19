@@ -4,6 +4,7 @@ Documentation       Template robot main suite.
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Dialogs
 Library             RPA.Desktop
+Library             RPA.Desktop.Windows
 Library             Collections
 Library             OperatingSystem
 Library             RPA.PDF
@@ -188,8 +189,8 @@ Save lunch menu
     FOR    ${INDEX}    IN RANGE    0    4
         ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
         ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
-        ${TITLE_TEXT}=    Get Text    ${TITLE}
-        ${FOOD_TEXT}=    Get Text    ${FOOD}
+        ${TITLE_TEXT}=    RPA.Browser.Selenium.Get Text    ${TITLE}
+        ${FOOD_TEXT}=    RPA.Browser.Selenium.Get Text    ${FOOD}
         Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${TITLE_TEXT}
         Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
         Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${FOOD_TEXT}
@@ -235,16 +236,16 @@ Save Job Results to a File
     ${elements}=    Get WebElements    class=wp_details
     Create File    ${ROBOT_FILES}${/}jobs.txt
     FOR    ${element}    IN    @{elements}
-        ${text}=    Get Text    ${element}
+        ${text}=    RPA.Browser.Selenium.Get Text    ${element}
         Append To File    ${ROBOT_FILES}${/}jobs.txt    ${text}
     END
 
 Compile Final PDF
-    ${process_status}=    Set Variable    Combile Final PDF: Success
+    ${process_status}=    Set Variable    Compile Final PDF: Success
     TRY
         ${files}=    Create List
         ...    ${ROBOT_FILES}${/}canvas.png
-        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen1.pn
+        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen1.png
         ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen2.png
         ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen3.png
         ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen4.png
@@ -252,7 +253,7 @@ Compile Final PDF
         ...    ${ROBOT_FILES}${/}jobs.pdf
         Add Files To Pdf    ${files}    ${ROBOT_FILES}${/}infodump.pdf
     EXCEPT    AS    ${error_message}
-        ${process_status}=    Set Variable    Combile Final PDF: Failed
+        ${process_status}=    Set Variable    Compile Final PDF: Failed
     FINALLY
         Append To List    ${STATUS}    ${process_status}
     END
@@ -261,7 +262,7 @@ Compile Final PDF
 Open PDF to User
     ${process_status}=    Set Variable    Open PDF to User: Success
     TRY
-        Open File    ${ROBOT_FILES}${/}infodump.pdf
+        RPA.Desktop.Windows.Open File    ${ROBOT_FILES}${/}infodump.pdf
     EXCEPT    AS    ${error_message}
         ${process_status}=    Set Variable    Open PDF to User: Failed
     FINALLY
