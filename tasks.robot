@@ -12,11 +12,11 @@ Library             TxtToPDFConverter
 
 *** Variables ***
 ${CREDENTIALS}
+${ROBOT_FILES}=             ${OUTPUT_DIR}${/}robot_files
 ${CANVAS_URL}=              https://opinto.laurea.fi/canvas.html
 ${LAUREA_INTRANET_URL}=     https://laureauas.sharepoint.com/sites/Opiskelijaintranet
 ${LAUREABAR_URL}=           https://fi.jamix.cloud/apps/menu/?anro=97090
 ${ITEWIKI_URL}=             https://www.itewiki.fi/it-rekry
-${TIMEOUT}=                 Set Selenium Timeout    20 seconds    #tarvitaanko enää?
 
 
 *** Tasks ***
@@ -32,38 +32,40 @@ Open Canvas and save task due dates
     [Teardown]    Close Browser
 
 Open Intranet and save News
- #   Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
+ #    Open dialog and ask credentials    #testausta varten: ota kommentti pois ja run
     Log in to Intranet
- #   Navigate to news
+ #    Navigate to news
     Save Intranet News
- #   Compile news to a single file
+ #    Compile news to a single file
     Log out from intranet
     [Teardown]    Close Browser
 
 Navigate to BarLaurea and save lunch menu
     Navigate to lunch menu
-    Save lunch menu    # muutettava samanlaiseksi kuin seuraavan päivän lounasmenu koodi
+    Save lunch menu
 #    Navigate to next lunch menu
 #    Save next lunch menu
     [Teardown]    Close Browser
 
-Navigate to Itewiki and Find a Job
+Navigate to Itewiki and Find Jobs
     Navigate to Itewiki
     Choose RPA Jobs
-    #Take Screenshots of the Results
     Save Job Results to a File
     [Teardown]    Close Browser
 
 Convert collected data to PDF
-    #Create PDF
-    Convert Txt To Pdf    jobs.txt    jobs.pdf
-    Convert Txt To Pdf    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    menu.pdf
+    Convert Txt To Pdf    ${ROBOT_FILES}${/}jobs.txt    ${ROBOT_FILES}${/}jobs.pdf
+    Convert Txt To Pdf    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${ROBOT_FILES}${/}menu.pdf
     Compile final PDF
+
+Show finished tasks to user
+    Open PDF to User
+    Show Robot Success Dialog
 
 
 *** Keywords ***
 Open dialog and ask credentials
-    Add heading    Otsikko
+    Add heading    LASSI requests your Credentials
     Add text    Username?
     Add text input    username
     Add text    Password?
@@ -94,7 +96,7 @@ Take screenshot
     ...    2s
     ...    Capture Element Screenshot
     ...    id=calendar-app
-    ...    ${OUTPUT_DIR}${/}canvas.png
+    ...    ${ROBOT_FILES}${/}canvas.png
 
 Log out from Canvas
     Click Button    id=global_nav_profile_link
@@ -114,27 +116,15 @@ Log in to Intranet
     Click Element    id=idBtn_Back
 
 #Navigate to news
-  #  Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
+    #    Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
 
 Save Intranet News
-#    Wait Until Keyword Succeeds
-#    ...    5x
-#    ...    2s
-#    ...    Capture Element Screenshot
-#    ...    id=61b21872-b872-4a01-8c48-f65b61b67401
-#    ...    ${OUTPUT_DIR}${/}intranet.png
-
-    Wait Until Element Is Visible    class=ms-NewsItem
-    ${LIST}=    Get WebElements    class=ms-NewsItem
-    ${index}=    Set Variable    1
-    FOR    ${element}    IN    @{LIST}
-        Scroll Element Into View    ${element}
-        Capture Element Screenshot    ${element}
-        ...    ${OUTPUT_DIR}${/}uutiset${/}uutinen${index}.png
-        ${index}=    Evaluate    ${index} + 1
-    END
-#Compile news to a single file
-#    Add Watermark Image To Pdf    ${OUTPUT_DIR}${/}uutiset${/}uutinen1.png    testi.pdf    uutiset.pdf
+    Wait Until Keyword Succeeds
+    ...    5x
+    ...    2s
+    ...    Capture Element Screenshot
+    ...    id=61b21872-b872-4a01-8c48-f65b61b67401
+    ...    ${ROBOT_FILES}${/}intranet.png
 
 Log out from intranet
     Wait Until Page Contains Element    id=O365_HeaderRightRegion
@@ -148,32 +138,22 @@ Navigate to lunch menu
     Wait Until Page Contains Element    class=v-button-caption
 
 Save lunch menu
-    # ${elements}=    Get WebElements    class=v-button-caption
-    # ${list}=    Create List
-
-    # Create File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt
-
-    # FOR    ${element}    IN    @{elements}[5:9]
-    #    ${text}=    Get Text    ${element}
-    #    Append To List    ${list}    ${text}
-    #    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${text}
-    # END
     Wait Until Page Contains Element
     ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
     ${TITLES}=    Get WebElements    class=multiline-button-caption-text
     ${FOODS}=    Get WebElements    class=item-name
 
-    Create File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt
+    Create File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt
 
     FOR    ${INDEX}    IN RANGE    0    4
         ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
         ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
         ${TITLE_TEXT}=    Get Text    ${TITLE}
         ${FOOD_TEXT}=    Get Text    ${FOOD}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${TITLE_TEXT}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    \n
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    ${FOOD_TEXT}
-        Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}menu.txt    \n
+        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${TITLE_TEXT}
+        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
+        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${FOOD_TEXT}
+        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
     END
 
 #Navigate to next lunch menu
@@ -202,7 +182,6 @@ Save lunch menu
 
 Navigate to Itewiki
     Open Available Browser
-    Maximize Browser Window
     Go to    ${ITEWIKI_URL}
 
 Choose RPA Jobs
@@ -214,21 +193,23 @@ Choose RPA Jobs
 Save Job Results to a File
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
     ${elements}=    Get WebElements    class=wp_details
-    Create File    ${OUTPUT_DIR}${/}jobs.txt
+    Create File    ${ROBOT_FILES}${/}jobs.txt
     FOR    ${element}    IN    @{elements}
         ${text}=    Get Text    ${element}
-        Append To File    ${OUTPUT_DIR}${/}jobs.txt    ${text}
+        Append To File    ${ROBOT_FILES}${/}jobs.txt    ${text}
     END
 
-Compile final PDF
+Compile Final PDF
     ${files}=    Create List
-    ...    ${OUTPUT_DIR}${/}canvas.png
-#    ...    ${OUTPUT_DIR}${/}intranet.png
-    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen1.png
-    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen2.png
-    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen3.png
-    ...    ${OUTPUT_DIR}${/}${/}uutiset${/}uutinen4.png
-    ...    ${OUTPUT_DIR}${/}menu.pdf
-#    ...    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
-    ...    ${OUTPUT_DIR}${/}jobs.pdf
-    Add Files To Pdf    ${files}    infodump.PDF
+    ...    ${ROBOT_FILES}${/}canvas.png
+    ...    ${ROBOT_FILES}${/}intranet.png
+    ...    ${ROBOT_FILES}${/}menu.pdf
+    ...    ${ROBOT_FILES}${/}jobs.pdf
+    Add Files To Pdf    ${files}    ${ROBOT_FILES}${/}infodump.pdf
+
+Open PDF to User
+    Open File    ${ROBOT_FILES}${/}infodump.pdf
+
+Show Robot Success Dialog
+    Add heading    Robot tasks finished!
+    Run dialog
