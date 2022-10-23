@@ -9,6 +9,7 @@ Library             Collections
 Library             OperatingSystem
 Library             RPA.PDF
 Library             TxtToPDFConverter
+Library    RPA.FileSystem
 
 
 *** Variables ***
@@ -66,8 +67,7 @@ Navigate to BarLaurea and save lunch menu
     TRY
         Navigate to lunch menu
         Save lunch menu
-    #    Navigate to next lunch menu
-    #    Save next lunch menu
+        Convert Lunch Text File to PDF
     EXCEPT    AS    ${error_message}
         ${process_status}=    Set Variable    Save Lunch menu: Failed
     FINALLY
@@ -81,6 +81,7 @@ Navigate to Itewiki and Find Jobs
         Navigate to Itewiki
         Choose RPA Jobs
         Save Job Results to a File
+        Convert Job Text File to PDF
     EXCEPT    AS    ${error_message}
         ${process_status}=    Set Variable    Save Itewiki Jobs: Failed
     FINALLY
@@ -88,15 +89,13 @@ Navigate to Itewiki and Find Jobs
     END
     [Teardown]    Close Browser
 
-Convert collected data to PDF
-    Convert Txt To Pdf    ${ROBOT_FILES}${/}jobs.txt    ${ROBOT_FILES}${/}jobs.pdf
-    Convert Txt To Pdf    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${ROBOT_FILES}${/}menu.pdf
+Compile collected data to PDF
     Compile final PDF
 
 Show finished tasks to user
     Open PDF to User
     Show Robot Success Dialog
-
+  
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -153,9 +152,6 @@ Log in to Intranet
     Wait Until Element Is Visible    id=idBtn_Back
     Click Element    id=idBtn_Back
 
-#Navigate to news
-    #    Click Link    link=Lue lisää uutisia ja tapahtumia uutiskeskuksesta
-
 Save Intranet News
     Wait Until Element Is Visible    class=ms-NewsItem
     ${LIST}=    Get WebElements    class=ms-NewsItem
@@ -163,7 +159,7 @@ Save Intranet News
     FOR    ${element}    IN    @{LIST}
         Scroll Element Into View    ${element}
         Capture Element Screenshot    ${element}
-        ...    ${ROBOT_FILES}${/}uutiset${/}uutinen${index}.png
+        ...    ${ROBOT_FILES}${/}uutinen${index}.png
         ${index}=    Evaluate    ${index} + 1
     END
 
@@ -184,42 +180,22 @@ Save lunch menu
     ${TITLES}=    Get WebElements    class=multiline-button-caption-text
     ${FOODS}=    Get WebElements    class=item-name
 
-    Create File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt
+    OperatingSystem.Create File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt
+    OperatingSystem.Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    Lounas Menu - BarLaurea\n\n
 
     FOR    ${INDEX}    IN RANGE    0    4
         ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
         ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
         ${TITLE_TEXT}=    RPA.Browser.Selenium.Get Text    ${TITLE}
         ${FOOD_TEXT}=    RPA.Browser.Selenium.Get Text    ${FOOD}
-        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${TITLE_TEXT}
-        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
-        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${FOOD_TEXT}
-        Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
+        OperatingSystem.Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${TITLE_TEXT}
+        OperatingSystem.Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
+        OperatingSystem.Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${FOOD_TEXT}
+        OperatingSystem.Append To File    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    \n
     END
 
-#Navigate to next lunch menu
-#    Wait Until Element Is Visible    class=date--next
-#    Click Element    class=date--next
-#    Wait Until Page Contains Element    id=appsmenu-1186092753-overlays
-
-#Save next lunch menu
-#    Wait Until Page Contains Element
-#    ...    xpath=//*[@id="main-view"]/div/div/div[3]/div/div[2]/div/div[7]/div/span/span[2]/span[2]
-#    ${TITLES}=    Get WebElements    class=multiline-button-caption-text
-#    ${FOODS}=    Get WebElements    class=item-name
-
-#    Create File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt
-
-#    FOR    ${INDEX}    IN RANGE    0    4
-#    ${TITLE}=    Get From List    ${TITLES}    ${INDEX}
-#    ${FOOD}=    Get From List    ${FOODS}    ${INDEX}
-#    ${TITLE_TEXT}=    Get Text    ${TITLE}
-#    ${FOOD_TEXT}=    Get Text    ${FOOD}
-#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${TITLE_TEXT}
-#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n
-#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    ${FOOD_TEXT}
-#    Append To File    ${OUTPUT_DIR}${/}ruokalistat${/}tomorrow_menu.txt    \n
-#    END
+Convert Lunch Text File to PDF
+    Convert Txt To Pdf    ${ROBOT_FILES}${/}ruokalistat${/}menu.txt    ${ROBOT_FILES}${/}menu.pdf
 
 Navigate to Itewiki
     Open Available Browser
@@ -234,24 +210,24 @@ Choose RPA Jobs
 Save Job Results to a File
     Wait Until Element Is Visible    xpath=/html/body/div[2]/div/div/div[2]/div[4]/div/div[2]
     ${elements}=    Get WebElements    class=wp_details
-    Create File    ${ROBOT_FILES}${/}jobs.txt
+    OperatingSystem.Create File    ${ROBOT_FILES}${/}jobs.txt
+    OperatingSystem.Append To File    ${ROBOT_FILES}${/}jobs.txt    Työpaikat\n\n
     FOR    ${element}    IN    @{elements}
         ${text}=    RPA.Browser.Selenium.Get Text    ${element}
-        Append To File    ${ROBOT_FILES}${/}jobs.txt    ${text}
+        OperatingSystem.Append To File    ${ROBOT_FILES}${/}jobs.txt    ${text}
     END
+
+Convert Job Text File to PDF
+    Convert Txt To Pdf    ${ROBOT_FILES}${/}jobs.txt    ${ROBOT_FILES}${/}jobs.pdf
 
 Compile Final PDF
     ${process_status}=    Set Variable    Compile Final PDF: Success
     TRY
-        ${files}=    Create List
-        ...    ${ROBOT_FILES}${/}canvas.png
-        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen1.png
-        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen2.png
-        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen3.png
-        ...    ${ROBOT_FILES}${/}${/}uutiset${/}uutinen4.png
-        ...    ${ROBOT_FILES}${/}menu.pdf
-        ...    ${ROBOT_FILES}${/}jobs.pdf
-        Add Files To Pdf    ${files}    ${ROBOT_FILES}${/}infodump.pdf
+        ${files}=    RPA.FileSystem.List Files In Directory    ${ROBOT_FILES}
+        FOR    ${file}    IN    @{files}
+             ${absolute_path}=    Absolute Path    ${file}
+        END
+        Add Files To Pdf    ${files}    ${OUTPUT_DIR}${/}info.pdf
     EXCEPT    AS    ${error_message}
         ${process_status}=    Set Variable    Compile Final PDF: Failed
     FINALLY
@@ -262,7 +238,7 @@ Compile Final PDF
 Open PDF to User
     ${process_status}=    Set Variable    Open PDF to User: Success
     TRY
-        RPA.Desktop.Windows.Open File    ${ROBOT_FILES}${/}infodump.pdf
+        RPA.Desktop.Windows.Open File    ${OUTPUT_DIR}${/}info.pdf
     EXCEPT    AS    ${error_message}
         ${process_status}=    Set Variable    Open PDF to User: Failed
     FINALLY
