@@ -9,7 +9,7 @@ Library             Collections
 Library             OperatingSystem
 Library             RPA.PDF
 Library             TxtToPDFConverter
-Library    RPA.FileSystem
+Library             RPA.FileSystem
 
 
 *** Variables ***
@@ -45,7 +45,7 @@ Open Canvas and save task due dates
         ${process_status}=    Set Variable    Save Canvas task due dates: Failed
     FINALLY
         Append To List    ${STATUS}    ${process_status}
-    END    
+    END
     [Teardown]    Close Browser
 
 Open Intranet and save News
@@ -95,7 +95,7 @@ Compile collected data to PDF
 Show finished tasks to user
     Open PDF to User
     Show Robot Success Dialog
-  
+
 
 *** Keywords ***
 Open dialog and ask credentials
@@ -225,7 +225,7 @@ Compile Final PDF
     TRY
         ${files}=    RPA.FileSystem.List Files In Directory    ${ROBOT_FILES}
         FOR    ${file}    IN    @{files}
-             ${absolute_path}=    Absolute Path    ${file}
+            ${absolute_path}=    Absolute Path    ${file}
         END
         Add Files To Pdf    ${files}    ${OUTPUT_DIR}${/}info.pdf
     EXCEPT    AS    ${error_message}
@@ -233,7 +233,6 @@ Compile Final PDF
     FINALLY
         Append To List    ${STATUS}    ${process_status}
     END
-    
 
 Open PDF to User
     ${process_status}=    Set Variable    Open PDF to User: Success
