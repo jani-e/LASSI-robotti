@@ -1,13 +1,11 @@
-# Template: Standard Robot Framework
+# LASSI-robotti
 
-This is the simplest template to start from.
+Laurea Ammattikorkeakoulu / Ohjelmistorobotiikan kurssi
 
-- Get started from a simple task template in `tasks.robot`.
-  - Uses [Robot Framework](https://robocorp.com/docs/languages-and-frameworks/robot-framework/basics) syntax.
-- You can configure your robot `robot.yaml`.
-- You can configure dependencies in `conda.yaml`.
+## Tekijät
 
-## Learning materials
+Jani Eriksson, Elina Henttunen, Joonas Paajonen & Pilvi Sornikivi
 
-- [Robocorp Developer Training Courses](https://robocorp.com/docs/courses)
-  "# LASSI-robotti"
+## Tarkoitus
+
+RPA-projekti, jossa robotti hakee eri sivustoista tietoja ja yhdistää ne yhteen PDF-tiedostoon.
